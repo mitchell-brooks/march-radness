@@ -1,5 +1,5 @@
-import { getLeaderboard } from 'lib/airtable/participants'
-import type { NextPage } from 'next'
+import { getLeaderboard, Participant } from 'lib/airtable/participants'
+import type { NextPage, NextPageContext } from 'next'
 import { DataTable } from 'grommet'
 
 import AppHead from '~/components/AppHead'
@@ -9,17 +9,11 @@ import AppBox from '~/ui/AppBox'
 import Heading from '~/ui/typography/Heading'
 import Text from '~/ui/typography/Text'
 
-const Leaderboard: NextPage = ({ leaderboard }) => {
-  console.log(leaderboard)
-  const leaderList = (
-    <AppBox as="ol">
-      {leaderboard.map(({ name, lg_pts, lg_high_score, pt_diff, owes }) => (
-        <AppBox key={`${name}`} as="li" marginLeft={2} marginTop={2}>
-          <Text>{name.split('')[0].toUpperCase() + name.slice(1)}</Text>
-        </AppBox>
-      ))}
-    </AppBox>
-  )
+interface Props {
+  leaderboard: Participant[]
+}
+
+const Leaderboard: NextPage<Props> = ({ leaderboard }) => {
   return (
     <Page>
       <AppHead title="Homepage" />
@@ -69,7 +63,7 @@ const Leaderboard: NextPage = ({ leaderboard }) => {
 
 export default Leaderboard
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: NextPageContext) {
   try {
     const leaderboard = await getLeaderboard()
     return {

@@ -26,7 +26,7 @@ export default class NProgress extends Component<Props> {
     if (this.timer) {
       clearTimeout(this.timer)
     }
-    this.timer = setTimeout(NProgressLib.start, showAfterMs)
+    this.timer = window.setTimeout(NProgressLib.start, showAfterMs)
   }
 
   routeChangeEnd = () => {
