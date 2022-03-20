@@ -1,6 +1,7 @@
-import { getLeaderboard, participantsTable } from '../../lib/airtable'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { getLeaderboard } from '../../lib/airtable'
 
-export default async (_req, res) => {
+export default async (_req: NextApiRequest, res: NextApiResponse) => {
   try {
     const leaderboard = await getLeaderboard()
     res.status(200).json(leaderboard)
