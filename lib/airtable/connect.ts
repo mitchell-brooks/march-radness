@@ -1,7 +1,6 @@
 // const Airtable = require('airtable')
 import Airtable from 'airtable'
 
-console.log(process.env)
 // Authenticate
 Airtable.configure({
   apiKey: process.env.AIRTABLE_TOKEN,
