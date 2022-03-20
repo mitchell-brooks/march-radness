@@ -1,6 +1,7 @@
 import { AnimatePresence } from 'framer-motion'
 import App from 'next/app'
 import { ThemeProvider } from 'styled-components'
+import { Grommet } from 'grommet'
 
 import NProgress from '~/components/NProgress'
 import AppNav from '~/components/layout/AppNav'
@@ -12,14 +13,16 @@ class MyApp extends App {
     const { Component, pageProps, router } = this.props
 
     return (
-      <ThemeProvider theme={light}>
-        <GlobalStyle />
-        <NProgress color={light.colors.primary} spinner={false} />
-        <AppNav />
-        <AnimatePresence exitBeforeEnter initial={false}>
-          <Component {...pageProps} key={router.route} />
-        </AnimatePresence>
-      </ThemeProvider>
+      <Grommet plain>
+        <ThemeProvider theme={light}>
+          <GlobalStyle />
+          <NProgress color={light.colors.primary} spinner={false} />
+          <AppNav />
+          <AnimatePresence exitBeforeEnter initial={false}>
+            <Component {...pageProps} key={router.route} />
+          </AnimatePresence>
+        </ThemeProvider>
+      </Grommet>
     )
   }
 }
