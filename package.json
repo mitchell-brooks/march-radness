@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "A Next.JS powered typescript starter with styled components, styled-system, jest, @testing-library and framer-motion",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "dev": "dotenv-load next",
+    "dev": "next",
     "build": "next build",
     "build:analyze": "cross-env ANALYZE=true next build",
     "start": "next start",
