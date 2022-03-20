@@ -4,26 +4,24 @@ import { DataTable } from 'grommet'
 
 import AppHead from '~/components/AppHead'
 import Page from '~/components/layout/Page'
-import useLeaderboard from '~/hooks/use-leaderboard'
 import AppBox from '~/ui/AppBox'
 import Heading from '~/ui/typography/Heading'
 import Text from '~/ui/typography/Text'
 import { getUpdateTime } from 'lib/airtable'
 
 interface Props {
-  leaderboard: Participant[]
   updateTime: string
 }
 
-const Leaderboard: NextPage<Props> = ({ leaderboard, updateTime }) => {
-  console.log(updateTime)
+const ParticipantPage: NextPage<Props> = ({ updateTime }) => {
   return (
     <Page>
       <AppHead title="Homepage" />
-      <Heading as="h1">Leaderboard</Heading>
+      <Heading as="h1">Participant</Heading>
       <AppBox as="h6" ml={1}>
         <Text>Last updated {updateTime}</Text>
       </AppBox>
+      {/*{' '}
       <AppBox mt={2}>
         <DataTable
           columns={[
@@ -65,19 +63,18 @@ const Leaderboard: NextPage<Props> = ({ leaderboard, updateTime }) => {
           data={leaderboard}
         />
       </AppBox>
+      */}
     </Page>
   )
 }
 
-export default Leaderboard
+export default ParticipantPage
 
 export async function getServerSideProps(context: NextPageContext) {
   try {
-    const leaderboard = await getLeaderboard()
     const updateTime = await getUpdateTime()
     return {
       props: {
-        leaderboard,
         updateTime,
       },
     }
