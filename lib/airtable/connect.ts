@@ -14,5 +14,10 @@ const playerTable = base(process.env.PLAYERS_TABLE_ID as string)
 const participantsTable = base(process.env.PARTICIPANTS_TABLE_ID as string)
 const teamsTable = base(process.env.TEAMS_TABLE_ID as string)
 const calcTable = base(process.env.CALC_TABLE_ID as string)
+const gamesTable = base(process.env.GAMES_TABLE_ID as string)
 
-export { playerTable, participantsTable, teamsTable, calcTable }
+function getRecord(record: string) {
+  return base(record)
+}
+
+export { getRecord, playerTable, participantsTable, teamsTable, calcTable, gamesTable }

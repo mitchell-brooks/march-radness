@@ -1,97 +1,99 @@
+import type Airtable from 'airtable'
 import { participantsTable } from '.'
 
 export type Participant = {
   name: string
+  participant: string
   draft_order: number
   lg_pts: number
   lg_high_score: number
   pt_diff: number
   owes: string
-  pts: {
-    pts_64: number
-    pts_32: number
-    pts_16: number
-    pts_8: number
-    pts_4: number
-    pts_2: number
-    pts_total: number
-    lg_pts: number
-  }
-  players: {
-    all_players: string[]
-    players_active: number
-    players_eliminated: number
-    players_inactive: number
-    active_players: string[]
-    eliminated_players: string[]
-    remaining_by_round: {
-      left64: number
-      left32: number
-      left16: number
-      left8: number
-      left4: number
-      left2: number
-    }
-  }
+  pts_64: number
+  pts_32: number
+  pts_16: number
+  pts_8: number
+  pts_4: number
+  pts_2: number
+  pts_total: number
+  all_players: string[]
+  players_active: number
+  players_eliminated: number
+  players_inactive: number
+  active_players: string[]
+  eliminated_players: string[]
+  left_64: number
+  left_32: number
+  left_16: number
+  left_8: number
+  left_4: number
+  left_2: number
+}
+
+//export async function getParticipant(name: string): Promise<Participant> {
+//const participant = await participantsTable.select({ filterByFormula: [{ field: 'participant', equals: name }] })
+//}
+
+function mapParticipant(rawParticipant: any) {
+  const {
+    participant,
+    players,
+    lg_pts,
+    draft_order,
+    pts_64,
+    pts_32,
+    pts_16,
+    pts_8,
+    pts_4,
+    pts_2,
+    pts_total,
+    players_active,
+    players_eliminated,
+    players_inactive,
+    active_players,
+    eliminated_players,
+    left_64,
+    left_32,
+    left_16,
+    left_8,
+    left_4,
+    left_2,
+    lg_high_score,
+    pt_diff,
+    owes,
+  } = rawParticipant.fields
+  return {
+    name: participant,
+    participant,
+    draft_order,
+    lg_pts,
+    lg_high_score,
+    pt_diff,
+    owes,
+    pts_64,
+    pts_32,
+    pts_16,
+    pts_8,
+    pts_4,
+    pts_2,
+    pts_total,
+    all_players: players,
+    players_active,
+    players_eliminated,
+    players_inactive,
+    active_players,
+    eliminated_players,
+    left_64,
+    left_32,
+    left_16,
+    left_8,
+    left_4,
+    left_2,
+  } as Participant
 }
 
 export async function getLeaderboard(): Promise<Participant[]> {
   const sortedTable = await participantsTable.select({ sort: [{ field: 'lg_pts', direction: 'desc' }] }).firstPage()
-  const handledTable: Participant[] = sortedTable.map(participantEntry => {
-    const {
-      participant,
-      players,
-      lg_pts,
-      draft_order,
-      pts_64,
-      pts_32,
-      pts_16,
-      pts_8,
-      pts_4,
-      pts_2,
-      pts_total,
-      players_active,
-      players_eliminated,
-      players_inactive,
-      active_players,
-      eliminated_players,
-      '64_left': left64,
-      '32_left': left32,
-      '16_left': left16,
-      '8_left': left8,
-      '4_left': left4,
-      '2_left': left2,
-      lg_high_score: lg_high_score,
-      pt_diff,
-      owes,
-    } = participantEntry.fields
-    return {
-      name: participant,
-      draft_order,
-      lg_pts,
-      lg_high_score,
-      pt_diff,
-      owes,
-      pts: {
-        pts_64,
-        pts_32,
-        pts_16,
-        pts_8,
-        pts_4,
-        pts_2,
-        pts_total,
-        lg_pts,
-      },
-      players: {
-        all_players: players,
-        players_active,
-        players_eliminated,
-        players_inactive,
-        active_players,
-        eliminated_players,
-        remaining_by_round: { left64, left32, left16, left8, left4, left2 },
-      },
-    } as Participant
-  })
+  const handledTable: Participant[] = sortedTable.map(rawParticipant => mapParticipant(rawParticipant))
   return handledTable
 }
