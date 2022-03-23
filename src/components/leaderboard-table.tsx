@@ -2,16 +2,15 @@ import AppBox from '~/ui/AppBox'
 import Text from '~/ui/typography/Text'
 import { DataTable } from 'grommet'
 import type { Participant, RoundInfo } from 'lib/airtable'
-
-type Round = '2' | '4' | '8' | '16' | '32' | '64' | 2 | 4 | 8 | 16 | 32 | 64
+import Link from 'next/link'
 
 interface Props {
   leaderboard: Participant[]
-  round: RoundInfo['roundNumber']
+  roundNumber: RoundInfo['roundNumber']
 }
 
-export const LeaderboardTable: React.FC<Props> = ({ leaderboard, round }) => {
-  const leftString: keyof Participant = `left_${round}`
+export const LeaderboardTable: React.FC<Props> = ({ leaderboard, roundNumber }) => {
+  const leftString: keyof Participant = `left_${roundNumber}`
 
   return (
     <AppBox mt={2}>
@@ -20,7 +19,11 @@ export const LeaderboardTable: React.FC<Props> = ({ leaderboard, round }) => {
           {
             property: 'name',
             header: <Text>Name</Text>,
-            render: ({ name }) => <Text>{name[0].toUpperCase() + name.slice(1)}</Text>,
+            render: ({ name }) => (
+              <Text>
+                <Link href={`/participant/${name}`}>{name[0].toUpperCase() + name.slice(1)}</Link>
+              </Text>
+            ),
             primary: true,
           },
           {
@@ -38,7 +41,7 @@ export const LeaderboardTable: React.FC<Props> = ({ leaderboard, round }) => {
           },
           {
             property: 'players_left',
-            header: <Text>{round}&nbsp;Left</Text>,
+            header: <Text>{roundNumber}&nbsp;Left</Text>,
             render: participant => <Text>{participant[leftString]}</Text>,
           },
           {

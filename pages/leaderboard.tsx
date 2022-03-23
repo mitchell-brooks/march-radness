@@ -24,7 +24,7 @@ const LeaderboardPage: NextPage<Props> = ({ leaderboard, updateTime, currentRoun
       <AppBox as="h6" ml={1}>
         <Text>Last updated {updateTime}</Text>
       </AppBox>
-      <LeaderboardTable leaderboard={leaderboard} round={roundNumber} />
+      <LeaderboardTable leaderboard={leaderboard} roundNumber={roundNumber} />
     </Page>
   )
 }
