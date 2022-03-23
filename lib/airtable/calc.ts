@@ -18,6 +18,14 @@ export async function getUpdateTime() {
   return format(utcToZonedTime(new Date(time as string), 'America/New_York'), 'cccc haa')
 }
 
+export async function getTotalWinnings() {
+  const calc = await calcTable.select({ fields: ['total_winnings'] }).firstPage()
+  console.log(calc)
+  const total = calc[0].fields.total_winnings
+  const numTotal = Number(total).toFixed(2)
+  return numTotal
+}
+
 export async function getCurrentRoundInfo(): Promise<RoundInfo> {
   const calc = await calcTable.select({ fields: ['current_round_link'] }).firstPage()
   console.log(':::calc', calc)
