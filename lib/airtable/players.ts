@@ -1,7 +1,7 @@
 import type { FieldSet } from 'airtable'
-import { playersTable } from './connect'
+import { gamesTable, playersTable } from './connect'
 
-function mapTeamPlayers(playerResponse: any): FieldSet {
+function mapTeamPlayers(playerResponse: any): FieldSet & Player {
   return playerResponse.fields
 }
 
@@ -57,4 +57,37 @@ export async function getParticipantTeam(participant: string) {
   const eliminated = eliminatedPlayers.map(playerResponse => mapTeamPlayers(playerResponse))
 
   return { active, eliminated }
+}
+
+export async function getPlayersInPlay(roundNumber: number | string, dayNumber: number | string | undefined) {
+  let round = roundNumber.toString()
+  if (round.indexOf('_') === -1) {
+    round = `${round}_${dayNumber}`
+  }
+  const res = await gamesTable.select({ fields: ['teams'], filterByFormula: `round = "${round}"` }).firstPage()
+  const teamsArray = (res[0].fields.teams as []) || []
+  const teamStrings = teamsArray.map(str => `team = "${str}"`)
+  const query = 'OR(' + teamStrings.join(',') + ')'
+  console.log(query)
+  const playersRes = await playersTable
+    .select({
+      filterByFormula: query,
+      sort: [
+        { field: 'team', direction: 'asc' },
+        { field: 'lg_pts', direction: 'desc' },
+        { field: 'pts_total', direction: 'desc' },
+      ],
+    })
+    .all()
+  const playersInPlay: Player[] = playersRes.map(player => mapTeamPlayers(player))
+  console.log(playersInPlay)
+  const teamsDict: Record<Player['team'], Player[]> = {}
+  for (const player of playersInPlay) {
+    const { team } = player
+    if (!(team in teamsDict)) {
+      teamsDict[team] = []
+    }
+    teamsDict[team].push(player)
+  }
+  return teamsDict
 }

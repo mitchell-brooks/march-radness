@@ -8,6 +8,7 @@ import Heading from '~/ui/typography/Heading'
 import Text from '~/ui/typography/Text'
 import { getCurrentRoundInfo, getTotalWinnings, getUpdateTime, RoundInfo } from 'lib/airtable'
 import { LeaderboardTable } from '~/components/leaderboard-table'
+import { WinningsTally } from '~/components/winnings-tally'
 
 interface Props {
   leaderboard: Participant[]
@@ -28,26 +29,7 @@ const LeaderboardPage: NextPage<Props> = ({ leaderboard, updateTime, currentRoun
       <AppBox as="section" mb={2}>
         <LeaderboardTable leaderboard={leaderboard} roundNumber={roundNumber} />
       </AppBox>
-      <AppBox as="section" ml={2} mt={4}>
-        <AppBox as="h2" mb={2}>
-          <Text>Current Total: ${totalWinnings}</Text>
-        </AppBox>
-        <AppBox as="h3" mb={2}>
-          <Text>Split</Text>
-        </AppBox>
-        <AppBox as="h4" mb={2}>
-          <Text>First Place: ${totalWinnings * 0.7}</Text>
-        </AppBox>
-        <AppBox as="h5" mb={2}>
-          <Text>Second Place: ${totalWinnings * 0.15}</Text>
-        </AppBox>
-        <AppBox as="h5" mb={2}>
-          <Text>Third Place: ${totalWinnings * 0.1}</Text>
-        </AppBox>
-        <AppBox as="h5" mb={2}>
-          <Text>Final Four MVP: ${totalWinnings * 0.05}</Text>
-        </AppBox>
-      </AppBox>
+      <WinningsTally totalWinnings={totalWinnings} />
     </Page>
   )
 }

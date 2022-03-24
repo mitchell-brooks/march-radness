@@ -30,13 +30,18 @@ const ParticipantPage: NextPage<Props> = ({ participant, updateTime, team, round
         <Text>Active Players</Text>
       </AppBox>
       <AppBox as="section" mb={4}>
-        <TeamTable team={active} roundNumber={roundNumber} />
+        <TeamTable
+          team={active}
+          roundNumber={roundNumber}
+          columns={['name', 'lg_pts', 'team', 'seed', 'pick']}
+          leftInRound={true}
+        />
       </AppBox>
       <AppBox as="h3">
         <Text>Eliminated Players</Text>
       </AppBox>
       <AppBox as="section">
-        <TeamTable team={eliminated} roundNumber={roundNumber} />
+        <TeamTable team={eliminated} roundNumber={roundNumber} columns={['name', 'lg_pts', 'team', 'seed', 'pick']} />
       </AppBox>
     </Page>
   )

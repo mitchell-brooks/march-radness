@@ -9,6 +9,9 @@ const AppNav: React.FC = () => (
       <AppBox as="li" marginRight={2}>
         <AppLink href="/leaderboard">Leaderboard</AppLink>
       </AppBox>
+      <AppBox as="li" ml={3} marginRight={2}>
+        <AppLink href="/in-play">Teams in Play</AppLink>
+      </AppBox>
     </AppBox>
   </AppBox>
 )
