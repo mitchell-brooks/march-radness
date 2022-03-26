@@ -15,6 +15,8 @@ export const LeaderboardTable: React.FC<Props> = ({ leaderboard, roundNumber }) 
   return (
     <AppBox mt={2}>
       <DataTable
+        background={{ header: 'white', body: ['light-2', 'white'] }}
+        a11yTitle="Player statistics table"
         columns={[
           {
             property: 'name',
@@ -25,6 +27,7 @@ export const LeaderboardTable: React.FC<Props> = ({ leaderboard, roundNumber }) 
               </Text>
             ),
             primary: true,
+            pin: true,
           },
           {
             property: 'lg_pts',

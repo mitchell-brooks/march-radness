@@ -137,7 +137,12 @@ export const TeamTable: React.FC<Props> = ({ team, roundNumber, tableTitle, colu
         </AppBox>
       )}
       <AppBox mt={2}>
-        <DataTable columns={dataTableColumns} data={team} />
+        <DataTable
+          background={{ header: 'white', body: ['light-2', 'white'] }}
+          a11yTitle="Player statistics table"
+          columns={dataTableColumns}
+          data={team}
+        />
       </AppBox>
     </>
   )
