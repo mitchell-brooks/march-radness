@@ -29,10 +29,11 @@ const HighScorersPage: NextPage<Props> = ({ highScorers, updateTime, roundNumber
           roundNumber={roundNumber}
           columns={[
             'name',
+            'pts_total',
+            'team',
             'active',
             'participant',
             'pick',
-            'pts_total',
             'pts_64',
             'pts_32',
             'pts_16',
