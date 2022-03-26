@@ -17,7 +17,9 @@ type ColumnsDict = {
 }
 
 export const TeamTable: React.FC<Props> = ({ team, roundNumber, tableTitle, columns, leftInRound = false }) => {
-  const roundString: keyof Player = `pts_${roundNumber}`
+  const rounds: Array<RoundInfo['roundNumber']> = ['64', '32', '16', '8', '4', '2']
+  const generateRoundString = (roundNumber: RoundInfo['roundNumber']): keyof Player => `pts_${roundNumber}`
+  const currentRound = generateRoundString(roundNumber)
   const columnsDict: ColumnsDict = {
     lg_pts: {
       property: 'lg_pts',
@@ -42,7 +44,14 @@ export const TeamTable: React.FC<Props> = ({ team, roundNumber, tableTitle, colu
     team: {
       property: 'team',
       header: <Text>Team</Text>,
-      render: ({ team }) => <Text>{team}</Text>,
+      render: ({ team }) => {
+        const teamURI = encodeURI(team)
+        return (
+          <Text>
+            <Link href={`/team/${teamURI}`}>{team}</Link>
+          </Text>
+        )
+      },
       sortable: true,
     },
     seed: {
@@ -54,7 +63,13 @@ export const TeamTable: React.FC<Props> = ({ team, roundNumber, tableTitle, colu
     pick: {
       property: 'pick',
       header: <Text>Pick</Text>,
-      render: ({ pick }) => <Text>{pick}</Text>,
+      render: ({ pick }) => <Text>{pick ? pick : <small>N/A</small>}</Text>,
+      sortable: true,
+    },
+    active: {
+      property: 'active',
+      header: <Text>Still&nbsp;Alive</Text>,
+      render: ({ active }) => <Text>{active}</Text>,
       sortable: true,
     },
     participant: {
@@ -62,25 +77,39 @@ export const TeamTable: React.FC<Props> = ({ team, roundNumber, tableTitle, colu
       header: <Text>Drafted&nbsp;by</Text>,
       render: ({ participant }) => (
         <Text>
-          {participant && (
+          {participant ? (
             <Link href={`/participant/${participant}`}>{participant[0].toUpperCase() + participant.slice(1)}</Link>
+          ) : (
+            <small>Undrafted</small>
           )}
         </Text>
       ),
     },
-    [roundString]: {
-      property: roundString,
-      header: <Text>Pts&nbsp;{roundNumber}</Text>,
-      render: (player: Player) => <Text>{player[roundString]}</Text>,
-      sortable: true,
-    },
   }
+
+  rounds.forEach(round => {
+    const roundString = generateRoundString(round)
+    columnsDict[roundString] = {
+      property: roundString,
+      header: <Text>Pts&nbsp;{round}</Text>,
+      render: (player: Player) => (
+        <Text>
+          {player[roundString] ? player[roundString] : player.active[0] === 'Yes' ? player[roundString] : '0'}
+        </Text>
+      ),
+      sortable: true,
+    }
+  })
 
   const dataTableColumns: DataTableProps<Player>['columns'] = [
     {
       property: 'name',
       header: <Text>Name</Text>,
-      render: ({ name }) => <Text>{name}</Text>,
+      render: ({ name, team }) => (
+        <Text>
+          <Link href={`/team/${encodeURI(team)}`}>{name}</Link>
+        </Text>
+      ),
       primary: true,
       pin: true,
     },
@@ -94,7 +123,7 @@ export const TeamTable: React.FC<Props> = ({ team, roundNumber, tableTitle, colu
   })
 
   if (leftInRound) {
-    const roundLeft = columnsDict[roundString]
+    const roundLeft = columnsDict[currentRound]
     if (roundLeft) {
       dataTableColumns.push(roundLeft)
     }

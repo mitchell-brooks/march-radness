@@ -15,16 +15,16 @@ export const WinningsTally: React.FC<Props> = ({ totalWinnings }) => {
         <Text>Split</Text>
       </AppBox>
       <AppBox as="h4" mb={2}>
-        <Text>First Place: ${totalWinnings * 0.7}</Text>
+        <Text>First Place: ${(totalWinnings * 0.7).toFixed(2)}</Text>
       </AppBox>
       <AppBox as="h5" mb={2}>
-        <Text>Second Place: ${totalWinnings * 0.15}</Text>
+        <Text>Second Place: ${(totalWinnings * 0.15).toFixed(2)}</Text>
       </AppBox>
       <AppBox as="h5" mb={2}>
-        <Text>Third Place: ${totalWinnings * 0.1}</Text>
+        <Text>Third Place: ${(totalWinnings * 0.1).toFixed(2)}</Text>
       </AppBox>
       <AppBox as="h5" mb={2}>
-        <Text>Final Four MVP: ${totalWinnings * 0.05}</Text>
+        <Text>Final Four MVP: ${(totalWinnings * 0.05).toFixed(2)}</Text>
       </AppBox>
     </AppBox>
   )

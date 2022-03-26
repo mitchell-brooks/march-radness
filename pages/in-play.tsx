@@ -6,15 +6,9 @@ import Page from '~/components/layout/Page'
 import AppBox from '~/ui/AppBox'
 import Heading from '~/ui/typography/Heading'
 import Text from '~/ui/typography/Text'
-import {
-  getUpdateTime,
-  getParticipantTeam,
-  getCurrentRoundInfo,
-  RoundInfo,
-  Player,
-  getPlayersInPlay,
-} from 'lib/airtable'
+import { getUpdateTime, getCurrentRoundInfo, RoundInfo, Player, getPlayersInPlay } from 'lib/airtable'
 import { TeamTable } from '~/components/team-table'
+import Link from 'next/link'
 
 interface Props {
   participant: string
@@ -33,7 +27,9 @@ const TeamInPlayTable: React.FC<TeamInPlayTableProps> = ({ teamName, team, round
   return (
     <>
       <AppBox as="h3">
-        <Text>{teamName}</Text>
+        <Text>
+          <Link href={`team/${encodeURI(teamName)}`}>{teamName}</Link>
+        </Text>
       </AppBox>
       <AppBox as="section" mb={4}>
         <TeamTable team={team} roundNumber={roundNumber} columns={['name', 'pts_total', 'participant', 'pick']} />

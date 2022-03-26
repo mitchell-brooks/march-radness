@@ -12,6 +12,9 @@ const AppNav: React.FC = () => (
       <AppBox as="li" ml={3} marginRight={2}>
         <AppLink href="/in-play">Teams in Play</AppLink>
       </AppBox>
+      <AppBox as="li" ml={3} marginRight={2}>
+        <AppLink href="/high-scorers">High Scorers</AppLink>
+      </AppBox>
     </AppBox>
   </AppBox>
 )

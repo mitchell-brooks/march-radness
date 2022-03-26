@@ -1,5 +1,4 @@
 import type { GetServerSideProps, NextPage, NextPageContext } from 'next'
-import { DataTable } from 'grommet'
 
 import AppHead from '~/components/AppHead'
 import Page from '~/components/layout/Page'

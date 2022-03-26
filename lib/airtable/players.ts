@@ -59,6 +59,30 @@ export async function getParticipantTeam(participant: string) {
   return { active, eliminated }
 }
 
+export async function getTournamentTeam(teamName: string) {
+  const playersRes = await playersTable
+    .select({
+      filterByFormula: `team = "${teamName}"`,
+      sort: [
+        { field: 'lg_pts', direction: 'desc' },
+        { field: 'pts_total', direction: 'desc' },
+      ],
+    })
+    .all()
+  const teamPlayers: Player[] = playersRes.map(player => mapTeamPlayers(player))
+  return teamPlayers
+}
+
+export async function getHighScorers() {
+  const playersRes = await playersTable
+    .select({
+      sort: [{ field: 'pts_total', direction: 'desc' }],
+    })
+    .firstPage()
+  const highScorers: Player[] = playersRes.map(player => mapTeamPlayers(player))
+  return highScorers
+}
+
 export async function getPlayersInPlay(roundNumber: number | string, dayNumber: number | string | undefined) {
   let round = roundNumber.toString()
   if (round.indexOf('_') === -1) {
@@ -66,7 +90,7 @@ export async function getPlayersInPlay(roundNumber: number | string, dayNumber: 
   }
   const res = await gamesTable.select({ fields: ['teams'], filterByFormula: `round = "${round}"` }).firstPage()
   const teamsArray = (res[0].fields.teams as []) || []
-  const teamStrings = teamsArray.map(str => `team = "${str}"`)
+  const teamStrings = teamsArray.map(str => `AND(team = "${str}", participant != "")`)
   const query = 'OR(' + teamStrings.join(',') + ')'
   console.log(query)
   const playersRes = await playersTable
